@@ -1,0 +1,64 @@
+<project name="Feide Lasso Java Example"
+         default="dist"
+         basedir="." >
+
+    <!-- Description of this project -->
+    <description>
+        Example of how to use the Lasso library from java to authenticate
+        a user against Feide.
+    </description>
+
+    <!-- Various directories used in this build script. -->
+    <property name="bin" value="bin" />
+    <property name="lib" value="lib" />
+    <property name="dist" value="dist" />
+    <property name="src" value="src" />
+    <property name="conf" value="conf" />
+
+    <!-- Add libraries in ${lib} to the class path. -->
+    <path id="libraryclasspath">
+        <fileset dir="${lib}" includes ="**/*.jar" />
+    </path>
+
+
+    <!-- Delete all generated output. -->
+    <target name="clean"
+            description="Clean distribution" >
+        <delete dir="${dist}" />
+        <delete dir="${bin}" />
+    </target>
+
+
+    <!-- Compile the servlet source code. -->
+    <target name="compile"
+            description="Compile source code" >
+        <mkdir dir="${bin}" />
+        <javac srcdir="${src}"
+               classpathref="libraryclasspath"
+               destdir="${bin}"
+               debug="on"
+               target="1.5" />
+    </target>
+
+    <!-- Generate servlet WAR file. -->
+    <target name="dist"
+            depends="compile"
+            description="Create servlet WAR file" >
+        <mkdir dir="${dist}" />
+        <war destfile="${dist}/feide_java_lasso.war"
+             webxml="web.xml" >
+
+            <classes dir="${bin}" />
+
+            <lib dir="${lib}" >
+                <include name="lasso.jar" />
+                <include name="saaj-api.jar" />
+                <include name="saaj-impl.jar" />
+            </lib>
+
+            <fileset dir="." includes="${conf}/**" />
+            <fileset dir="." includes="${src}/**" />
+            <fileset file="README.txt" />
+        </war>
+    </target>
+</project>
