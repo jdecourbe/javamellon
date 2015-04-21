@@ -1,0 +1,1 @@
+Example java code for SAML 2.0 SP authentication with the Lasso library
